@@ -1,0 +1,5 @@
+IMDb_data
+.env
+venv
+.ruff_cache
+.vscode
