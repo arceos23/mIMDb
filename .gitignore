@@ -3,3 +3,4 @@ IMDb_data
 venv
 .ruff_cache
 .vscode
+.DS_Store
