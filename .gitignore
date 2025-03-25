@@ -4,3 +4,4 @@ venv
 .ruff_cache
 .vscode
 .DS_Store
+api/__pycache__
