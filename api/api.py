@@ -19,7 +19,7 @@ class Title(BaseModel):
     runtime_minutes: int | None = None
 
 
-@app.get("/titles/{id_}")
+@app.get("/titles/{id_}", response_model=Title)
 async def get_title(id_: UUID4) -> Title:
     try:
         with psycopg.connect(
@@ -40,7 +40,7 @@ async def get_title(id_: UUID4) -> Title:
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
-@app.get("/titles")
+@app.get("/titles", response_model=list[Title])
 async def get_titles(offset: int = 0, limit: int = 10) -> list[Title]:
     try:
         with psycopg.connect(
@@ -49,11 +49,11 @@ async def get_titles(offset: int = 0, limit: int = 10) -> list[Title]:
             with conn.cursor(row_factory=class_row(Title)) as cur:
                 cur = cur.execute(
                     """
-                            SELECT id, tconst, title_type_id, primary_title, original_title, is_adult, start_year, end_year, runtime_minutes
-                            FROM title
-                            OFFSET %s
-                            LIMIT %s;
-                        """,
+                        SELECT id, tconst, title_type_id, primary_title, original_title, is_adult, start_year, end_year, runtime_minutes
+                        FROM title
+                        OFFSET %s
+                        LIMIT %s;
+                    """,
                     [offset, limit],
                 )
                 return [record for record in cur]
